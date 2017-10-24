@@ -21,7 +21,8 @@ class Ink extends React.PureComponent {
     opacity    : 0.25,
     radius     : 150,
     recenter   : true,
-    hasTouch   : HAS_TOUCH
+    hasTouch   : HAS_TOUCH,
+    center     : false,
   }
 
   constructor (props) {
@@ -141,17 +142,39 @@ class Ink extends React.PureComponent {
     )
   }
 
+  _getCenter = () => {
+    let el = this.refs.canvas
+    let { top, bottom, left, right } = el.getBoundingClientRect()
+
+    return {
+      clientX: left + (right - left) / 2,
+      clientY: top + (bottom - top) / 2,
+    }
+  }
+
   _onPress = (e) => {
+    let { center } = this.props
     let { button, ctrlKey, clientX, clientY, changedTouches } = e
     let timeStamp = Date.now()
 
     if (changedTouches) {
-      for (var i = 0; i < changedTouches.length; i++) {
-        let { clientX, clientY } = changedTouches[i]
+      if (center) {
+        let { clientX, clientY } = this._getCenter()
         this.pushBlot(timeStamp, clientX, clientY)
+      } else {
+        for (var i = 0; i < changedTouches.length; i++) {
+          let { clientX, clientY } = changedTouches[i]
+          this.pushBlot(timeStamp, clientX, clientY)
+        }
       }
     } else if (button === MOUSE_LEFT && !ctrlKey) {
-      this.pushBlot(timeStamp, clientX, clientY)
+      if (center) {
+        let { clientX, clientY } = this._getCenter()
+        console.log(clientX, clientY)
+        this.pushBlot(timeStamp, clientX, clientY)
+      } else {
+        this.pushBlot(timeStamp, clientX, clientY)
+      }
     }
   }
 
