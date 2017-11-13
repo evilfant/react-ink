@@ -100,7 +100,7 @@ class Ink extends React.PureComponent {
   }
 
   pushBlot (timeStamp, clientX, clientY) {
-    let el = this.refs.canvas
+    let el = this.canvas
 
     // 0.13 support
     if (el instanceof window.HTMLCanvasElement === false) {
@@ -133,7 +133,7 @@ class Ink extends React.PureComponent {
 
     return (
       <canvas className="ink"
-              ref="canvas"
+              ref={el => this.canvas = el}
               style={{ ...STYLE, ...this.props.style }}
               height={ height * density }
               width={ width * density }
@@ -143,7 +143,7 @@ class Ink extends React.PureComponent {
   }
 
   _getCenter = () => {
-    let el = this.refs.canvas
+    let el = this.canvas
     let { top, bottom, left, right } = el.getBoundingClientRect()
 
     return {
