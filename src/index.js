@@ -170,7 +170,6 @@ class Ink extends React.PureComponent {
     } else if (button === MOUSE_LEFT && !ctrlKey) {
       if (center) {
         let { clientX, clientY } = this._getCenter()
-        console.log(clientX, clientY)
         this.pushBlot(timeStamp, clientX, clientY)
       } else {
         this.pushBlot(timeStamp, clientX, clientY)
